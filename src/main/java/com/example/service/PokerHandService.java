@@ -5,6 +5,7 @@ import com.example.domain.Poker;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class PokerHandService {
@@ -25,6 +26,21 @@ public class PokerHandService {
     public String pokerHandPair(List<Poker> playerOnePokers, List<Poker> playerTwoPokers) {
         Map<String, Long> counterOne = playerOnePokers.stream().map(Poker::getId).collect(Collectors.groupingBy(p -> p, Collectors.counting()));
         Map<String, Long> counterSecond = playerTwoPokers.stream().map(Poker::getId).collect(Collectors.groupingBy(p -> p, Collectors.counting()));
-        return counterOne.size()>counterSecond.size()?"player2":"player1";
+        AtomicReference<String> key1 = new AtomicReference<>("");
+        AtomicReference<String> key2 = new AtomicReference<>("");
+        counterOne.forEach((k, v) -> {
+            if (v > 1)
+                key1.set(k);
+        });
+        counterSecond.forEach((k, v) -> {
+            if (v > 1)
+                key2.set(k);
+        });
+        if (key1.get().equals("") && !key2.get().equals("")) {
+            return "player2";
+        } else if (!key1.get().equals("") && !key2.get().equals("") && comparator.compare(key1.get(), key2.get()) < 0) {
+            return "player2";
+        }
+        return "";
     }
 }
