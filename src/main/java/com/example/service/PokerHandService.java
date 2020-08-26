@@ -2,11 +2,11 @@ package com.example.service;
 
 import com.example.domain.Poker;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class PokerHandService {
@@ -27,31 +27,31 @@ public class PokerHandService {
     public String pokerHandPair(List<Poker> playerOnePokers, List<Poker> playerTwoPokers) {
         Map<String, Long> counterOne = playerOnePokers.stream().map(Poker::getId).collect(Collectors.groupingBy(p -> p, Collectors.counting()));
         Map<String, Long> counterSecond = playerTwoPokers.stream().map(Poker::getId).collect(Collectors.groupingBy(p -> p, Collectors.counting()));
-        AtomicReference<String> key1 = new AtomicReference<>("");
-        AtomicReference<String> key2 = new AtomicReference<>("");
+        List<String> pairListOne = new ArrayList<>();
+        List<String> pairListSecond = new ArrayList<>();
         AtomicInteger pairCounterOne = new AtomicInteger();
         AtomicInteger pairCounterSecond = new AtomicInteger();
         counterOne.forEach((k, v) -> {
             if (v > 1) {
-                key1.set(k);
+                pairListOne.add(k);
                 pairCounterOne.getAndIncrement();
             }
         });
         counterSecond.forEach((k, v) -> {
             if (v > 1) {
-                key2.set(k);
+                pairListSecond.add(k);
                 pairCounterSecond.getAndIncrement();
             }
         });
-        if (key1.get().equals("") && !key2.get().equals("")) {
+        if (pairListOne.size() == 0 && pairListSecond.size() != 0) {
             return "player2";
-        } else if (!key1.get().equals("") && key2.get().equals("")) {
+        } else if (pairListOne.size() != 0 && pairListSecond.size() == 0) {
             return "player1";
-        } else if (!key1.get().equals("") && !key2.get().equals("")) {
+        } else if (pairListOne.size() != 0 && pairListSecond.size() != 0) {
             if (pairCounterOne.get() < pairCounterSecond.get()) {
                 return "player2";
             }
-            if (comparator.compare(key1.get(), key2.get()) < 0) {
+            if (comparator.compare(pairListOne.get(0), pairListSecond.get(0)) < 0) {
                 return "player2";
             } else {
                 return "player1";
