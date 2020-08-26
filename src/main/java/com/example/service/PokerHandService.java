@@ -18,4 +18,12 @@ public class PokerHandService {
 
         return Collections.max(idNewListOne) > Collections.max(idNewListTwo) ? "player1" : "player2";
     }
+
+
+    public String pokerHandPair(List<Poker> playerOnePokers, List<Poker> playerTwoPokers) {
+
+        playerOnePokers.stream().map(Poker::getId);
+
+        return "";
+    }
 }
