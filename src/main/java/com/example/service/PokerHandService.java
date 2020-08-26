@@ -40,9 +40,14 @@ public class PokerHandService {
             return "player2";
         } else if (!key1.get().equals("") && key2.get().equals("")) {
             return "player1";
-        } else if (!key1.get().equals("") && !key2.get().equals("") && comparator.compare(key1.get(), key2.get()) < 0) {
-            return "player2";
+        } else if (!key1.get().equals("") && !key2.get().equals("")){
+            if(comparator.compare(key1.get(), key2.get()) < 0) {
+                return "player2";
+            }else{
+                return "player1";
+            }
         }
+
         return "";
     }
 }
