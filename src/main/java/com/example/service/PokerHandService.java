@@ -5,6 +5,7 @@ import com.example.domain.Poker;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -28,26 +29,34 @@ public class PokerHandService {
         Map<String, Long> counterSecond = playerTwoPokers.stream().map(Poker::getId).collect(Collectors.groupingBy(p -> p, Collectors.counting()));
         AtomicReference<String> key1 = new AtomicReference<>("");
         AtomicReference<String> key2 = new AtomicReference<>("");
+        AtomicInteger pairCounterOne = new AtomicInteger();
+        AtomicInteger pairCounterSecond = new AtomicInteger();
         counterOne.forEach((k, v) -> {
-            if (v > 1)
+            if (v > 1) {
                 key1.set(k);
+                pairCounterOne.getAndIncrement();
+            }
         });
         counterSecond.forEach((k, v) -> {
-            if (v > 1)
+            if (v > 1) {
                 key2.set(k);
+                pairCounterSecond.getAndIncrement();
+            }
         });
         if (key1.get().equals("") && !key2.get().equals("")) {
             return "player2";
         } else if (!key1.get().equals("") && key2.get().equals("")) {
             return "player1";
-        } else if (!key1.get().equals("") && !key2.get().equals("")){
-            if(comparator.compare(key1.get(), key2.get()) < 0) {
+        } else if (!key1.get().equals("") && !key2.get().equals("")) {
+            if (pairCounterOne.get() < pairCounterSecond.get()) {
                 return "player2";
-            }else{
+            }
+            if (comparator.compare(key1.get(), key2.get()) < 0) {
+                return "player2";
+            } else {
                 return "player1";
             }
         }
-
         return "";
     }
 }
