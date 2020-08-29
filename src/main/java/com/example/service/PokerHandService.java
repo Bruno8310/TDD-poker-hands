@@ -30,6 +30,12 @@ public class PokerHandService {
     public String compare(List<Poker> playerOnePokers, List<Poker> playerTwoPokers) {
         Map<Integer, List<Poker>> pokerMapOne = getPokerMap(playerOnePokers);
         Map<Integer, List<Poker>> pokerMapSecond = getPokerMap(playerTwoPokers);
+        if (isFlush(playerOnePokers)) {
+            return "player1";
+        }
+        if (isFlush(playerTwoPokers)) {
+            return "player2";
+        }
         if (isStraight(pokerMapOne)) {
             return "player1";
         }
@@ -69,5 +75,10 @@ public class PokerHandService {
             num = nextNum;
         }
         return result;
+    }
+
+    private Boolean isFlush(List<Poker> pokers) {
+        Map<Character, List<Poker>> pokerMap = pokers.stream().collect(Collectors.groupingBy(Poker::getColor));
+        return pokerMap.size() == 1;
     }
 }

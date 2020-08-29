@@ -154,4 +154,28 @@ public class PokerHandTest {
         // then
         assertEquals("player1", result);
     }
+
+    @Test
+    void should_return_winner_is_player2_when_compare_card_given_player1_3H4D5S6C7D_and_player2_2H3H5H9HKH() {
+        // given
+        List<Poker> playerOnePokers = Arrays.asList(
+                new Poker(3, 'H'),
+                new Poker(4, 'D'),
+                new Poker(5, 'S'),
+                new Poker(6, 'C'),
+                new Poker(7, 'D'));
+
+        List<Poker> playerTwoPokers = Arrays.asList(
+                new Poker(2, 'H'),
+                new Poker(3, 'H'),
+                new Poker(5, 'H'),
+                new Poker(9, 'H'),
+                new Poker(pokerHandService.convertToNumber("K"), 'H'));
+        // when
+        PokerHandService pokerHandService = new PokerHandService();
+        String result = pokerHandService.compare(playerOnePokers, playerTwoPokers);
+
+        // then
+        assertEquals("player2", result);
+    }
 }
