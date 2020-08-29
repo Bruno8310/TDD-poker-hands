@@ -2,32 +2,15 @@ package com.example.domain;
 
 public class Poker {
 
-    private String id;
+    private Integer id;
     private Character color;
 
-    public Poker(String id, Character color) {
-        this.id = this.match(id);
+    public Poker(Integer id, Character color) {
+        this.id = id;
         this.color = color;
     }
 
-    private String match(String character) {
-        switch (character) {
-            case "T":
-                return "10";
-            case "J":
-                return "11";
-            case "Q":
-                return "12";
-            case "K":
-                return "13";
-            case "A":
-                return "14";
-            default:
-                return character;
-        }
-    }
-
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
