@@ -30,6 +30,12 @@ public class PokerHandService {
     public String compare(List<Poker> playerOnePokers, List<Poker> playerTwoPokers) {
         Map<Integer, List<Poker>> pokerMapOne = getPokerMap(playerOnePokers);
         Map<Integer, List<Poker>> pokerMapSecond = getPokerMap(playerTwoPokers);
+        if (isFullHouse(pokerMapOne)) {
+            return "player1";
+        }
+        if (isFullHouse(pokerMapSecond)) {
+            return "player2";
+        }
         if (isFlush(playerOnePokers)) {
             return "player1";
         }
@@ -80,5 +86,20 @@ public class PokerHandService {
     private Boolean isFlush(List<Poker> pokers) {
         Map<Character, List<Poker>> pokerMap = pokers.stream().collect(Collectors.groupingBy(Poker::getColor));
         return pokerMap.size() == 1;
+    }
+
+    private Boolean isFullHouse(Map<Integer, List<Poker>> pokerMap) {
+        Boolean isFullHouse = false;
+        if (pokerMap.size() == 2) {
+            Iterator<Integer> integers = pokerMap.keySet().iterator();
+            Integer integer1 = integers.next();
+            Integer integer2 = integers.next();
+            Integer listSize1 = pokerMap.get(integer1).size();
+            Integer listSize2 = pokerMap.get(integer2).size();
+            if ((listSize1 == 2 && listSize2 == 3) || (listSize1 == 3 && listSize2 == 2)) {
+                isFullHouse = true;
+            }
+        }
+        return isFullHouse;
     }
 }
