@@ -30,6 +30,12 @@ public class PokerHandService {
     public String compare(List<Poker> playerOnePokers, List<Poker> playerTwoPokers) {
         Map<Integer, List<Poker>> pokerMapOne = getPokerMap(playerOnePokers);
         Map<Integer, List<Poker>> pokerMapSecond = getPokerMap(playerTwoPokers);
+        if (isStraightFlush(playerOnePokers)) {
+            return "player1";
+        }
+        if (isStraightFlush(playerTwoPokers)) {
+            return "player2";
+        }
         if (isFourOfAKind(pokerMapOne)) {
             return "player1";
         }
@@ -123,5 +129,9 @@ public class PokerHandService {
             }
         }
         return isFourOfAKind;
+    }
+
+    private Boolean isStraightFlush(List<Poker> pokers) {
+        return isStraight(getPokerMap(pokers)) && isFlush(pokers);
     }
 }
