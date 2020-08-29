@@ -2,6 +2,7 @@ package com.example.service;
 
 import com.example.domain.Poker;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -27,6 +28,14 @@ public class PokerHandService {
     }
 
     public String compare(List<Poker> playerOnePokers, List<Poker> playerTwoPokers) {
+        Map<Integer, List<Poker>> pokerMapOne = getPokerMap(playerOnePokers);
+        Map<Integer, List<Poker>> pokerMapSecond = getPokerMap(playerTwoPokers);
+        if (isStraight(pokerMapOne)) {
+            return "player1";
+        }
+        if (isStraight(pokerMapSecond)) {
+            return "player2";
+        }
         if (getPokerMap(playerOnePokers).size() < getPokerMap(playerTwoPokers).size()) {
             return "player1";
         }
@@ -45,5 +54,20 @@ public class PokerHandService {
     private Map getPokerMap(List<Poker> pokers) {
         Map<Integer, List<Poker>> pokerMap = pokers.stream().collect(Collectors.groupingBy(Poker::getId));
         return pokerMap;
+    }
+
+    private Boolean isStraight(Map<Integer, List<Poker>> pokerMap) {
+        Boolean result = true;
+        Iterator<Integer> iterator = pokerMap.keySet().iterator();
+        int num = iterator.next();
+        while (iterator.hasNext()) {
+            int nextNum = iterator.next();
+            if (nextNum != num + 1) {
+                result = false;
+                break;
+            }
+            num = nextNum;
+        }
+        return result;
     }
 }
