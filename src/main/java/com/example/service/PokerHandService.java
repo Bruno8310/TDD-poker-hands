@@ -30,6 +30,12 @@ public class PokerHandService {
     public String compare(List<Poker> playerOnePokers, List<Poker> playerTwoPokers) {
         Map<Integer, List<Poker>> pokerMapOne = getPokerMap(playerOnePokers);
         Map<Integer, List<Poker>> pokerMapSecond = getPokerMap(playerTwoPokers);
+        if (isFourOfAKind(pokerMapOne)) {
+            return "player1";
+        }
+        if (isFourOfAKind(pokerMapSecond)) {
+            return "player2";
+        }
         if (isFullHouse(pokerMapOne)) {
             return "player1";
         }
@@ -101,5 +107,21 @@ public class PokerHandService {
             }
         }
         return isFullHouse;
+    }
+
+
+    private Boolean isFourOfAKind(Map<Integer, List<Poker>> pokerMap) {
+        Boolean isFourOfAKind = false;
+        if (pokerMap.size() == 2) {
+            Iterator<Integer> integers = pokerMap.keySet().iterator();
+            Integer integer1 = integers.next();
+            Integer integer2 = integers.next();
+            Integer listSize1 = pokerMap.get(integer1).size();
+            Integer listSize2 = pokerMap.get(integer2).size();
+            if ((listSize1 == 4 && listSize2 == 1) || (listSize1 == 1 && listSize2 == 4)) {
+                isFourOfAKind = true;
+            }
+        }
+        return isFourOfAKind;
     }
 }
